@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Validate me!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
+  form { max-width: 420px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; }
+  .row { display: grid; grid-template-columns: 210px 1fr; gap: 8px; align-items: center; margin: 10px 0; }
+  .actions { margin-top: 12px; }
+  #messages { margin-top: 14px; padding: 12px; border-radius: 8px; }
+  #messages.error { background: #ffecec; border: 1px solid #f5b5b5; color: #7a0000; }
+  #messages.ok { background: #edfbea; border: 1px solid #a9e5a2; color: #0e6b15; }
+  small.hint { color: #555; }
+</style>
+</head>
+<body>
+
+<h2>Validate me!</h2>
+
+<form id="validateForm" novalidate>
+
+  <div class="row">
+    <label for="username">Username (6–8 characters)</label>
+    <input id="username" name="username" type="text" />
+  </div>
+
+  
+  <div class="row">
+    <label for="pin">Pin</label>
+    <input id="pin" name="pin" type="text" />
+  </div>
+
+  <div class="row">
+    <label for="validatePinChk">Validate Pin</label>
+    <input id="validatePinChk" name="validatePinChk" type="checkbox" />
+  </div>
+
+  <div class="row">
+    <label for="testMeChk">Test me</label>
+    <input id="testMeChk" name="testMeChk" type="checkbox" />
+  </div>
+
+
+  <div class="row">
+    <label for="state">States</label>
+    <select id="state" name="state">
+      <option value="">-- Select --</option>
+     
+    </select>
+  </div>
+  <fieldset style="border:0; margin: 6px 0 0;">
+    <legend style="font-weight:600;">Choose one (Milk/Butter/Cheese)</legend>
+    <label><input type="radio" name="item" value="Milk" /> Milk</label><br/>
+    <label><input type="radio" name="item" value="Butter" /> Butter</label><br/>
+    <label><input type="radio" name="item" value="Cheese" /> Cheese</label>
+  </fieldset>
+
+  <div class="actions">
+    <button type="button" id="checkBtn">Check Form</button>
+  </div>
+
+  <div id="messages" class="" aria-live="polite"></div>
+<small class="hint">Validation message format per hint: “&lt;Form field&gt; not validated”.</small>
+</form>
+
+<script>
+ 
+  (function populateStates() {
+    const states = ["Karnatka", "MadhyPradesh"];
+    const sel = document.getElementById("state");
+    states.forEach(s => {
+      const o = document.createElement("option");
+      o.value = s; o.textContent = s;
+      sel.appendChild(o);
+    });
+  })();
+
+
+  const isAlphanumeric = (s) => /^[A-Za-z0-9]+$/.test(s);
+
+ 
+  document.getElementById("checkBtn").addEventListener("click", function () {
+    const msgs = [];
+
+    const username = document.getElementById("username").value.trim();
+    const pin = document.getElementById("pin").value.trim();
+    const validatePin = document.getElementById("validatePinChk").checked;
+    const testMe = document.getElementById("testMeChk").checked;
+    const state = document.getElementById("state").value;
+    const item = (document.querySelector('input[name="item"]:checked') || {}).value;
+
+    if (!(username.length >= 6 && username.length <= 8)) {
+      msgs.push("Username not validated");
+    }
+
+  
+    if (validatePin) {
+      if (pin.length === 0 || !isAlphanumeric(pin)) {
+        msgs.push("Pin not validated (must be alphanumeric when 'Validate Pin' is checked)");
+      }
+    }
+   
+    if (!validatePin && pin.length > 0 && !isAlphanumeric(pin)) {
+      msgs.push("Pin not validated (alphanumeric only)");
+    }
+
+    
+    if (!state) {
+      msgs.push("States not validated");
+    }
+
+    msgs.push(`Test me is ${testMe ? "checked" : "unchecked"}.`);
+
+    if (item) {
+      msgs.push(`Selected item: ${item}.`);
+    } else {
+      msgs.push("No item selected.");
+    }
+
+   
+    const box = document.getElementById("messages");
+    if (msgs.some(m => m.includes("not validated"))) {
+      box.className = "error";
+    } else {
+      box.className = "ok";
+    }
+    box.innerHTML = "<ul style='margin:0; padding-left:18px;'>" +
+      msgs.map(m => `<li>${m}</li>`).join("") + "</ul>";
+  });
+</script>
+</body>
+</html>p
