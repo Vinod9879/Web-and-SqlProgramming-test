@@ -1,25 +1,16 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using hacks;
 
-namespace SampleWebformApp
+namespace hacks
 {
     public partial class Search : System.Web.UI.Page
     {
-        public class Word
-        {
-            public string EnglishWord { get; set; }
-            public string Translation { get; set; }
-        }
-        public static List<Word> words = new List<Word>
-        {
-            new Word{ EnglishWord = "sequel", Translation = "subsequent event" },
-            new Word{ EnglishWord = "adulation", Translation = "excessive flattery" },
-            new Word{ EnglishWord = "fun", Translation = "" }
-        };
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -27,27 +18,22 @@ namespace SampleWebformApp
 
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            string input = txtWord.Text.Trim();
-            var word = words.FirstOrDefault(w => w.EnglishWord.ToLower() == input.ToLower());
+            string searchWord = txtWord.Text.Trim();
+
+            var word = WordRepository.Words.FirstOrDefault(
+                w => w.EnglishWord.ToLower() == searchWord.ToLower()
+            );
 
             if (word != null)
             {
-                Response.Redirect("AddWord.aspx?word=" + Server.UrlEncode(input));
+                // Word found → go to AddWord page
+                Response.Redirect($"AddWord.aspx?word={searchWord}");
             }
             else
             {
-              
-
-               string script = $"var confirmed = confirm('The word \\'{input}\\' is not present. Do you want to add it?');" +
-                                $"if (confirmed) {{ window.location.href = 'AddWord.aspx?newword={Server.UrlEncode(input)}'; }}";
-
-                ClientScript.RegisterStartupScript(this.GetType(), "ConfirmAdd", script, true);
+                // Word not found → go to Error page
+                Response.Redirect($"Error.aspx?word={searchWord}");
             }
-        }
-
-        protected void txtWord_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

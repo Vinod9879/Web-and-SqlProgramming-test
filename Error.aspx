@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Error.aspx.cs" Inherits="SampleWebformApp.Error" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Error.aspx.cs" Inherits="hacks.Error" %>
 
 <!DOCTYPE html>
 
@@ -13,6 +13,7 @@
             <br /><br />
             <asp:HyperLink ID="lnkBack" runat="server" NavigateUrl="Search.aspx">Try another word</asp:HyperLink>
         </div>
+        
     </form>
 </body>
 </html>

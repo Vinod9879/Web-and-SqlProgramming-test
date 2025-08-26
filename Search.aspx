@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Search.aspx.cs" Inherits="SampleWebformApp.Search" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Search.aspx.cs" Inherits="hacks.Search" %>
 
 <!DOCTYPE html>
 
@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
        <div style="padding:20px;">
             English word:
-            <asp:TextBox ID="txtWord" runat="server" OnTextChanged="txtWord_TextChanged"></asp:TextBox>
+            <asp:TextBox ID="txtWord" runat="server"></asp:TextBox>
             <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click" />
         </div>
     </form>
